@@ -104,3 +104,14 @@ bin/cz/vutbr/feec/nn/NetworkGenerator$1.class
 bin/cz/vutbr/feec/nn/NetworkGenerator.class
 python_model_funkcni_batch.py
 python_model_funkcni_mnist_blok.py
+python_model_0.py
+python_model_1.py
+python_model_2.py
+python_model_3.py
+python_model_4.py
+bin/cz/vutbr/feec/nn/NetworkGenerator$1.class
+neuralnetworkgenerator.code-workspace
+env/
+bin/
+.vscode/
+

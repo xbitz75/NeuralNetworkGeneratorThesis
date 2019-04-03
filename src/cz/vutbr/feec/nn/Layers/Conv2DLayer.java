@@ -9,14 +9,14 @@ public class Conv2DLayer extends AbstractLayer {
 		relu, tanh, sigmoid
 	}
 
-	private int maxNeurons;
+	private int neuronsUpperBound;
 	private int neurons;
 	private String kernelSize = "(3, 3)";
 	private ACTIVATION activation;
 
-	public Conv2DLayer(int id, NetworkGenerator network, int maxNeurons) {
+	public Conv2DLayer(int id, NetworkGenerator network, int neuronsUpperBound) {
 		super(id, network);
-		this.maxNeurons = maxNeurons;
+		this.neuronsUpperBound = neuronsUpperBound;
 		createConnections();
 		layerType = "Conv2D";
 		setShapesFromPrevLayer();
@@ -35,7 +35,7 @@ public class Conv2DLayer extends AbstractLayer {
 	@Override
 	protected void createConnections() {
 		activation = ACTIVATION.values()[new Random().nextInt(ACTIVATION.values().length)];
-		neurons = new Random().nextInt(maxNeurons) + 60;
+		neurons = new Random().nextInt(neuronsUpperBound) + 60;
 		for (int i = 0; i < prevLayers.size(); i++) {
 			setPrevLayers(i);
 		}

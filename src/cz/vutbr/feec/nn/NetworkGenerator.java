@@ -30,6 +30,7 @@ public class NetworkGenerator implements INetworkGenerator {
 	public ArrayList<String> merges1D;
 	protected ArrayList<String> merges2D;
 	public Boolean flattened = false;
+	private int neuronsUpperBound = 200;
 
 	/**
 	 * Creates network of randomly generated layers
@@ -50,18 +51,16 @@ public class NetworkGenerator implements INetworkGenerator {
 		merges2D = new ArrayList<>();
 		layer = new AbstractLayer[capacity];
 		layer[0] = new InputLayer(0, this); // input layer creation
-		int maxNeurons = (int) Math.round((Math.random() * ((400 - 50) + 1)) + 50); // generating number of neurons per
-																					// layer
 		if (getDimensions() == 2) {
-			layer[1] = new Conv1DLayer(1, this, maxNeurons); // first hidden layer
+			layer[1] = new Conv1DLayer(1, this, neuronsUpperBound); // first hidden layer
 		} else if (getDimensions() == 3) {
-			layer[1] = new Conv2DLayer(1, this, maxNeurons); // first hidden layer
+			layer[1] = new Conv2DLayer(1, this, neuronsUpperBound); // first hidden layer
 		}
-		generateRest(outputShape, maxNeurons);
+		generateRest(outputShape, neuronsUpperBound);
 
 	}
 
-	private void generateRest(String outputShape, int maxNeurons) {
+	private void generateRest(String outputShape, int neuronsUpperBound) {
 		for (int i = 2; i < layer.length; i++) {
 			double rnd = Math.random();
 			if (isMergable(i, rnd)) {
@@ -70,7 +69,7 @@ public class NetworkGenerator implements INetworkGenerator {
 				switch (getDimensions()) {
 				case 1: // dimensions == 1
 					if (rnd < 0.50) {
-						layer[i] = new DenseLayer(i, this, maxNeurons);
+						layer[i] = new DenseLayer(i, this, neuronsUpperBound);
 					} else if (rnd < 0.90 && layer[i - 1].getLayerType() != "BatchNormalization") {
 						layer[i] = new BatchNormalization(i, this);
 					} else if (rnd <= 1 && layer[i - 1].getLayerType() != "Dropout") {
@@ -79,17 +78,17 @@ public class NetworkGenerator implements INetworkGenerator {
 					break;
 				case 2: // dimensions == 2
 					if (rnd < 0.20 && layer[i - 1].shape0 > 2) { // 20 % probability
-						layer[i] = new Conv1DLayer(i, this, maxNeurons);
+						layer[i] = new Conv1DLayer(i, this, neuronsUpperBound);
 					} else if (rnd < 0.40 && layer[i - 1].getLayerType() != "MnistBlock") { // making sure mnist blocks
 																							// wont
 																							// follow each other
-						layer[i] = new MnistBlock(i, this);
+						layer[i] = new MnistBlock(i, this, neuronsUpperBound);
 					} else if (rnd < 0.25 && layer[i - 1].getLayerType() != "Dropout") {
 						layer[i] = new Dropout(i, this);
 					} else if (rnd < 0.60 && layer[i - 1].getLayerType() != "BatchNormalization") {
 						layer[i] = new BatchNormalization(i, this);
 					} else if (rnd < 0.80) {
-						layer[i] = new DenseLayer(i, this, maxNeurons);
+						layer[i] = new DenseLayer(i, this, neuronsUpperBound);
 					} else if (rnd < 0.90 && layer[i - 1].shape0 > 10) {
 						layer[i] = new MaxPooling1D(i, this);
 					} else {
@@ -100,9 +99,9 @@ public class NetworkGenerator implements INetworkGenerator {
 					if (i < (layer.length * 0.75)) {
 						if (layer[i - 1].getLayerType() == "MaxPooling2D") {
 							if (rnd < 0.50) {
-								layer[i] = new InceptionV1(i, this);
+								layer[i] = new InceptionV1(i, this, neuronsUpperBound);
 							} else {
-								layer[i] = new InceptionVn(i, this);
+								layer[i] = new InceptionVn(i, this, neuronsUpperBound);
 							}
 						} else if (rnd < 0.80 && layer[i - 1].shape0 > 2 && layer[i - 1].shape1 > 2
 								&& layer[i - 1].getLayerType() != "Conv2D") {

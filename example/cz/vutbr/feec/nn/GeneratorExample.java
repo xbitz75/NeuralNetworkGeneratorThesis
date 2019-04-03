@@ -2,8 +2,6 @@ package cz.vutbr.feec.nn;
 
 import java.io.IOException;
 
-import cz.vutbr.feec.nn.Interfaces.INetworkGenerator;
-
 public class GeneratorExample {
 	private static int models;
 	private static int capacity;
@@ -18,13 +16,9 @@ public class GeneratorExample {
 		capacity = 10; // number of layers per model
 		inputShape = new Integer[] { 128, 128, 3, 0 }; // input
 		dimensions = 3; // number of inputs dimensions
-		outputShape = "siamese"; // output of NN or "siamese"
-		
-		// Bellow create new instances of INetworkGenerator and IFileGenerator to simulate IoC
-		NetworkGenerator networkGenerator = new NetworkGenerator(capacity, dimensions, inputShape, outputShape);
-		// Above create new instances of INetworkGenerator and IFileGenerator to simulate IoC
-		
-		generate(models, networkGenerator);
+		outputShape = "3472"; // output of NN or "siamese"
+				
+		generate(models);
 	}
 	
 	/**
@@ -32,11 +26,10 @@ public class GeneratorExample {
 	 * 
 	 * @param models
 	 * 			  - number of generated models
-	 * @param networkGenerator
-	 *            - instance of INetworkGenerator
 	 **/
-	private static void generate(int models, INetworkGenerator networkGenerator) {
+	private static void generate(int models) {
 		for (int i = 0; i < models; i++) {
+			NetworkGenerator networkGenerator = new NetworkGenerator(capacity, dimensions, inputShape, outputShape);
 			String code = networkGenerator.build();
 			FileGenerator fileGenerator = new FileGenerator("python_model_" + i + ".py", code); // TODO create IoC version
 			try {

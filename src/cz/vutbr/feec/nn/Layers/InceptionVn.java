@@ -11,11 +11,11 @@ public class InceptionVn extends AbstractLayer {
 	private int neurons3;
 	private int n;
 
-	public InceptionVn(int id, NetworkGenerator network) {
+	public InceptionVn(int id, NetworkGenerator network, int neuronsUpperBound) {
 		super(id, network);
-		neurons1 = (int) Math.round((Math.random() * ((200 - 20) + 1)) + 20);// randomly generated amount of neurons
-		neurons2 = (int) Math.round((Math.random() * ((200 - 20) + 1)) + 20);
-		neurons3 = (int) Math.round((Math.random() * ((200 - 20) + 1)) + 20);
+		neurons1 = (int) Math.round((Math.random() * ((neuronsUpperBound - 20) + 1)) + 20);// randomly generated amount of neurons
+		neurons2 = (int) Math.round((Math.random() * ((neuronsUpperBound - 20) + 1)) + 20);
+		neurons3 = (int) Math.round((Math.random() * ((neuronsUpperBound - 20) + 1)) + 20);
 		n = new Random().nextInt(8) + 3;
 		
 		layerType = "InceptionVn";

@@ -7,10 +7,10 @@ public class MnistBlock extends AbstractLayer {
 	private int neurons;
 	private float droupoutRate;
 
-	public MnistBlock(int id, NetworkGenerator network) {
+	public MnistBlock(int id, NetworkGenerator network, int neuronsUpperBound) {
 		super(id, network);
 		droupoutRate = (float) Math.random(); // randomly generated rate parameter for dropout
-		neurons = (int) Math.round((Math.random() * ((700 - 200) + 1)) + 200); // randomly generated amount of
+		neurons = (int) Math.round((Math.random() * ((neuronsUpperBound - 20) + 1)) + 20); // randomly generated amount of
 																				// neurons
 		layerType = "MnistBlock";
 		createConnections();

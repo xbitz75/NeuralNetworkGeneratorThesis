@@ -9,13 +9,13 @@ public class DenseLayer extends AbstractLayer {
 		relu, tanh, sigmoid
 	}
 
-	private int maxNeurons;
+	private int neuronsUpperBound;
 	private int neurons;
 	private ACTIVATION activation;
 
-	public DenseLayer(int id, NetworkGenerator network, int maxNeurons) {
+	public DenseLayer(int id, NetworkGenerator network, int neuronsUpperBound) {
 		super(id, network);
-		this.maxNeurons = maxNeurons;
+		this.neuronsUpperBound = neuronsUpperBound;
 		layerType = "Dense";
 		createConnections();
 		setShapesFromPrevLayer();
@@ -40,7 +40,7 @@ public class DenseLayer extends AbstractLayer {
 	@Override
 	protected void createConnections() {
 		activation = ACTIVATION.values()[new Random().nextInt(ACTIVATION.values().length)];
-		neurons = new Random().nextInt(maxNeurons) + 40;
+		neurons = new Random().nextInt(neuronsUpperBound) + 40;
 		for (int i = 0; i < prevLayers.size(); i++) {
 			setPrevLayers(i);
 		}
