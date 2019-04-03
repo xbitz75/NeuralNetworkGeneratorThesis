@@ -1,8 +1,10 @@
-package cz.vutbr.feec.nn;
+package cz.vutbr.feec.nn.Layers;
 
 import java.util.Random;
 
-public class Conv1DLayer extends Layer {
+import cz.vutbr.feec.nn.NetworkGenerator;
+
+public class Conv1DLayer extends AbstractLayer {
 	private enum ACTIVATION {
 		relu, tanh, sigmoid
 	}
@@ -15,42 +17,33 @@ public class Conv1DLayer extends Layer {
 	public Conv1DLayer(int id, NetworkGenerator network, int maxNeurons) {
 		super(id, network);
 		this.maxNeurons = maxNeurons;
-		randomize();
-		// z predchozi vrstvy prevezme jeji tvar
-		this.shape = getPreviousLayers()[0].getLayerShape();
-		layerType = LAYERTYPE.Conv1D;
+		createConnections();
+		layerType = "Conv1D";
+		setShapesFromPrevLayer();
+		shape0 = shape0 - (kernelSize-1);
+		shape1 = neurons;
 	}
 
 	@Override
 	public String build() {
-//		if (getPreviousLayers()[0].dimension() > 1) {
-//			return "layer_" + String.format("%03d", id) + "b = Flatten()(" + getPreviousLayers()[0].getLayerId() + ")\n"
-//					+ "layer_" + String.format("%03d", id) + " = Conv1D(" + neurons + ", " + kernelSize
-//					+ ", activation='" + activation + "')(" + getPreviousLayers()[0].getLayerId() + "b)";
-//		} else {
 			return "layer_" + String.format("%03d", id) + " = Conv1D(" + neurons + ", " + kernelSize + ", activation='"
 					+ activation + "')(" + getPreviousLayers()[0].getLayerId() + ")";
-//		}
 	}
 
-	// nahodne nastaveni activacni funkce a poctu neuronu
+	// randomly selects activation function and number of neurons, fills list of previous layers
 	@Override
-	public void randomize() {
+	protected void createConnections() {
 		activation = ACTIVATION.values()[new Random().nextInt(ACTIVATION.values().length)];
 		neurons = new Random().nextInt(maxNeurons) + 1;
 		for (int i = 0; i < prevLayers.size(); i++) {
-			randomize(i);
+			setPrevLayers(i);
 		}
 	}
 
 	@Override
 	public String toString() {
-		return "DenseLayer [id=" + id + "]";
+		return "Conv1D [id=" + id + "]";
 	}
 
-	@Override
-	public int dimension() {
-		return 1;
-	}
 
 }

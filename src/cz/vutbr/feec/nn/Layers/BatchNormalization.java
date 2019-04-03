@@ -1,11 +1,14 @@
-package cz.vutbr.feec.nn;
+package cz.vutbr.feec.nn.Layers;
 
-public class BatchNormalization extends Layer {
+import cz.vutbr.feec.nn.NetworkGenerator;
+
+public class BatchNormalization extends AbstractLayer {
 
 	public BatchNormalization(int id, NetworkGenerator network) {
 		super(id, network);
-		layerType = LAYERTYPE.BatchNormalization;
-		randomize();
+		layerType = "BatchNormalization";
+		createConnections();
+		setShapesFromPrevLayer();
 	}
 
 	@Override
@@ -14,9 +17,9 @@ public class BatchNormalization extends Layer {
 	}
 
 	@Override
-	public void randomize() {
+	protected void createConnections() {
 		for (int i = 0; i < prevLayers.size(); i++) {
-			randomize(i);
+			setPrevLayers(i);
 		}
 	}
 
@@ -25,9 +28,5 @@ public class BatchNormalization extends Layer {
 		return "BatchNormalization [id=" + id + "]";
 	}
 
-	@Override
-	public int dimension() {
-		return 0;
-	}
 
 }

@@ -2,25 +2,51 @@ package cz.vutbr.feec.nn;
 
 import java.io.IOException;
 
+import cz.vutbr.feec.nn.Interfaces.INetworkGenerator;
+
 public class GeneratorExample {
+	private static int models;
+	private static int capacity;
+	private static int dimensions;
+	private static String outputShape;
+	private static Integer[] inputShape;
+
 	public static void main(String[] args) throws IOException {
 
-		Integer pocet_modelu = 5; // nastaveni poctu generovanych modelu
-
-		for (int i = 0; i < pocet_modelu; i++) {
-			// (int capacity, String inputShape, String outputShape)
-			NetworkGenerator generator = new NetworkGenerator(8, "28,28", "10"); //shape=(100,1) default
-			String code = generator.build();
-			// System.out.println(code);
-
-			FileGenerator fileGenerator = new FileGenerator("python_model" + i + ".py", code);
-			fileGenerator.generateFile();
-
-		}
-
+		// Network parameters
+		models = 5; // number of generated models
+		capacity = 10; // number of layers per model
+		inputShape = new Integer[] { 128, 128, 3, 0 }; // input
+		dimensions = 3; // number of inputs dimensions
+		outputShape = "siamese"; // output of NN or "siamese"
+		
+		// Bellow create new instances of INetworkGenerator and IFileGenerator to simulate IoC
+		NetworkGenerator networkGenerator = new NetworkGenerator(capacity, dimensions, inputShape, outputShape);
+		// Above create new instances of INetworkGenerator and IFileGenerator to simulate IoC
+		
+		generate(models, networkGenerator);
 	}
+	
+	/**
+	 * Creates .py files with neural network architectures
+	 * 
+	 * @param models
+	 * 			  - number of generated models
+	 * @param networkGenerator
+	 *            - instance of INetworkGenerator
+	 **/
+	private static void generate(int models, INetworkGenerator networkGenerator) {
+		for (int i = 0; i < models; i++) {
+			String code = networkGenerator.build();
+			FileGenerator fileGenerator = new FileGenerator("python_model_" + i + ".py", code); // TODO create IoC version
+			try {
+				fileGenerator.generateFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}	
+	
+	
 }
-
-// TODO dropout
-// TODO pooling
-// TODO domluva
