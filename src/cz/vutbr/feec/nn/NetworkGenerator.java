@@ -28,9 +28,9 @@ public class NetworkGenerator implements INetworkGenerator {
 	private String outputShape;
 	private Integer dimensions;
 	public ArrayList<String> merges1D;
-	protected ArrayList<String> merges2D;
+	public ArrayList<String> merges2D;
 	public Boolean flattened = false;
-	private int neuronsUpperBound = 200;
+	private int neuronsUpperBound = 150;
 
 	/**
 	 * Creates network of randomly generated layers
@@ -97,13 +97,13 @@ public class NetworkGenerator implements INetworkGenerator {
 					break;
 				case 3: // dimensions == 3
 					if (i < (layer.length * 0.75)) {
-						if (layer[i - 1].getLayerType() == "MaxPooling2D") {
-							if (rnd < 0.50) {
+						if (rnd >= 0.50) {
+							if (rnd < 0.75) {
 								layer[i] = new InceptionV1(i, this, neuronsUpperBound);
 							} else {
 								layer[i] = new InceptionVn(i, this, neuronsUpperBound);
 							}
-						} else if (rnd < 0.80 && layer[i - 1].shape0 > 2 && layer[i - 1].shape1 > 2
+						} else if (rnd < 0.50 && layer[i - 1].shape0 > 2 && layer[i - 1].shape1 > 2
 								&& layer[i - 1].getLayerType() != "Conv2D") {
 							layer[i] = new Conv2DLayer(i, this, 90);
 						} else if (rnd < 0.20 && layer[i - 1].shape0 > 10 && layer[i - 1].shape1 > 10
@@ -298,7 +298,6 @@ public class NetworkGenerator implements INetworkGenerator {
 						merges2D.add(m.toString());
 					}
 				}
-
 				if (temp0 == shapeList0.get(j)) {
 					StringBuilder m = new StringBuilder();
 					m.append("layer_" + String.format("%03d", layer[j + 2].id));
@@ -315,7 +314,6 @@ public class NetworkGenerator implements INetworkGenerator {
 						merges1D.add(m.toString());
 					}
 				}
-
 			}
 		}
 		if (merges1D.isEmpty() || merges2D.isEmpty()) {

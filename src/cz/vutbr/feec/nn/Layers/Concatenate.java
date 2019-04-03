@@ -14,8 +14,8 @@ public class Concatenate extends AbstractLayer {
 	}
 	
 	private void selectMerge() {
-		int rng = (int) Math.round((Math.random() * (((network.merges1D.size() - 2) - 0) + 1)) + 0);
-		merge = network.merges1D.get(rng);
+		int rng = (int) Math.round((Math.random() * (((network.merges2D.size() - 2) - 0) + 1)) + 0);
+		merge = network.merges2D.get(rng);
 	}
 
 	@Override

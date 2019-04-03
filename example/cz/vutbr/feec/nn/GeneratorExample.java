@@ -13,7 +13,7 @@ public class GeneratorExample {
 
 		// Network parameters
 		models = 5; // number of generated models
-		capacity = 10; // number of layers per model
+		capacity = 10; // number of layers/blocks per model
 		inputShape = new Integer[] { 128, 128, 3, 0 }; // input
 		dimensions = 3; // number of inputs dimensions
 		outputShape = "3472"; // output of NN or "siamese"
@@ -31,7 +31,7 @@ public class GeneratorExample {
 		for (int i = 0; i < models; i++) {
 			NetworkGenerator networkGenerator = new NetworkGenerator(capacity, dimensions, inputShape, outputShape);
 			String code = networkGenerator.build();
-			FileGenerator fileGenerator = new FileGenerator("python_model_" + i + ".py", code); // TODO create IoC version
+			FileGenerator fileGenerator = new FileGenerator("python_model_" + i + ".py", code);
 			try {
 				fileGenerator.generateFile();
 			} catch (IOException e) {
