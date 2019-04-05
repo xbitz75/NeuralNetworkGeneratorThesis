@@ -40,3 +40,4 @@ public class MnistBlock extends AbstractLayer {
 	}
 
 }
+
