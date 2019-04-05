@@ -10,16 +10,17 @@ public class Graph {
 	
 	
 	
-	public Graph(int numberOfNodes, int numberOfNeighbors) {
+	public Graph(int numberOfNodes, int numberOfNeighbors, double probability) {
 		if (numberOfNeighbors%2 != 0) {
 			throw new IllegalArgumentException("numberOfNeighbors must be even");
 		}
-		idGenerator = new IDGenerator();
-		edgeTable = new ArrayList<>();
-		nodes = new ArrayList<>();
-		for (int i = 0; i < numberOfNodes; i++) {
-			nodes.add(new Node(idGenerator.generateID()));
-		}
+		generateNodes(numberOfNodes);
+		generateBasicConnections(numberOfNeighbors);
+		
+		
+	}
+
+	private void generateBasicConnections(int numberOfNeighbors) {
 		for (int i = 0; i < nodes.size(); i++) {
 			for (int j = 1; j <= numberOfNeighbors/2; j++) {
 				Edge tempEdge;
@@ -41,6 +42,15 @@ public class Graph {
 			}
 		}
 	}
+
+	private void generateNodes(int numberOfNodes) {
+		idGenerator = new IDGenerator();
+		edgeTable = new ArrayList<>();
+		nodes = new ArrayList<>();
+		for (int i = 0; i < numberOfNodes; i++) {
+			nodes.add(new Node(idGenerator.generateID()));
+		}
+	}
 	
 	public ArrayList<Node> getNodes() {
 		return nodes;
@@ -50,4 +60,13 @@ public class Graph {
 		return edgeTable;
 	}
 
+	public ArrayList<Edge> getEdgesStartingAt(Node node) {
+		ArrayList<Edge> result = new ArrayList<>();
+		for (Edge edge : edgeTable) {
+			if (edge.startsAtNode(node)) {
+				result.add(edge);
+			}
+		}
+		return result;
+	}
 }

@@ -25,5 +25,13 @@ public class Edge {
 		String string = "Edge: "+nodes.get(0).getID()+" --> "+nodes.get(1).getID();
 		return string;
 	} 
+	
+	public boolean startsAtNode(Node node) {
+		if (nodes.get(0) == node) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 }
