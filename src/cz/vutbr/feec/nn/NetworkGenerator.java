@@ -5,22 +5,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
-import cz.vutbr.feec.nn.Layers.BatchNormalization;
-import cz.vutbr.feec.nn.Layers.Concatenate;
-import cz.vutbr.feec.nn.Layers.Conv1DLayer;
-import cz.vutbr.feec.nn.Layers.Conv2DLayer;
-import cz.vutbr.feec.nn.Layers.ConvBlock;
-import cz.vutbr.feec.nn.Layers.DenseLayer;
-import cz.vutbr.feec.nn.Layers.Dropout;
-import cz.vutbr.feec.nn.Layers.FlattenLayer;
-import cz.vutbr.feec.nn.Layers.InceptionV1;
-import cz.vutbr.feec.nn.Layers.InceptionVn;
-import cz.vutbr.feec.nn.Layers.InputLayer;
 import cz.vutbr.feec.nn.Interfaces.INetworkGenerator;
-import cz.vutbr.feec.nn.Layers.AbstractLayer;
-import cz.vutbr.feec.nn.Layers.MaxPooling1D;
-import cz.vutbr.feec.nn.Layers.MaxPooling2D;
-import cz.vutbr.feec.nn.Layers.MnistBlock;
+import cz.vutbr.feec.nn.Layers.*;
 
 public class NetworkGenerator implements INetworkGenerator {
 	private AbstractLayer[] layer;
