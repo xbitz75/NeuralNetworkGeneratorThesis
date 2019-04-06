@@ -9,7 +9,7 @@ import graph.Node;
 public class GraphExample {
 
 	public static void main(String[] args) {
-		Graph graph = new Graph(20, 4, 0.8);
+		Graph graph = new Graph(20, 4, 0.4);
 		
 		ArrayList<Node> nodes = graph.getNodes();
 		for (Node node : nodes) {
@@ -17,18 +17,7 @@ public class GraphExample {
 		}
 		
 		printEdges(graph);
-		
-		ArrayList<Edge> edgesFromNode1 = graph.getEdgesStartingAt(nodes.get(0));
-		System.out.println("Printing edges starting at node"+nodes.get(0).getID());
-		for (Edge edge : edgesFromNode1) {
-			System.out.println(edge.toString());
-		}
-		
-		ArrayList<Edge> edgesExceptNode1 = graph.getEdgesWithout(nodes.get(0));
-		System.out.println("Printing edges not containing node"+nodes.get(0).getID());
-		for (Edge edge : edgesExceptNode1) {
-			System.out.println(edge.toString());
-		}
+		System.out.println("Number of edges: "+graph.getEdges().size());
 	}
 
 	private static void printEdges(Graph graph) {

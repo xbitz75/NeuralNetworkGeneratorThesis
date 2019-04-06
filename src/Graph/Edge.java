@@ -43,10 +43,10 @@ public class Edge {
 	}
 	
 	public boolean containsNode(Node node) {
-		if (!startsAtNode(node) && !endsAtNode(node)) {
-			return false;
-		}else {
+		if (nodes.contains(node)) {
 			return true;
+		}else {
+			return false;
 		}
 	}
 	
