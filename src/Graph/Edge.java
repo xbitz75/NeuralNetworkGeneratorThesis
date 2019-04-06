@@ -22,7 +22,7 @@ public class Edge {
 	
 	@Override
 	public String toString() {
-		String string = "Edge: "+nodes.get(0).getID()+" --- "+nodes.get(1).getID();
+		String string = "Edge: "+nodes.get(0).getID()+" --> "+nodes.get(1).getID();
 		return string;
 	} 
 	
