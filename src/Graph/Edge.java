@@ -1,4 +1,4 @@
-package Graph;
+package graph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class Edge {
 	
 	@Override
 	public String toString() {
-		String string = "Edge: "+nodes.get(0).getID()+" --> "+nodes.get(1).getID();
+		String string = "Edge: "+nodes.get(0).getID()+" --- "+nodes.get(1).getID();
 		return string;
 	} 
 	
@@ -33,5 +33,25 @@ public class Edge {
 			return false;
 		}
 	}
-
+	
+	public boolean endsAtNode(Node node) {
+		if (nodes.get(1) == node) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	public boolean containsNode(Node node) {
+		if (!startsAtNode(node) && !endsAtNode(node)) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+	
+	public void rewire(Node node) {
+		nodes.set(1, node);
+	}
+	
 }

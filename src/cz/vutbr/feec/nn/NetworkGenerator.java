@@ -5,8 +5,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
-import cz.vutbr.feec.nn.Interfaces.INetworkGenerator;
-import cz.vutbr.feec.nn.Layers.*;
+import cz.vutbr.feec.nn.interfaces.INetworkGenerator;
+import cz.vutbr.feec.nn.layers.*;
 
 public class NetworkGenerator implements INetworkGenerator {
 	private AbstractLayer[] layer;

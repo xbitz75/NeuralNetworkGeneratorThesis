@@ -1,4 +1,4 @@
-package cz.vutbr.feec.nn.Layers;
+package cz.vutbr.feec.nn.layers;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;

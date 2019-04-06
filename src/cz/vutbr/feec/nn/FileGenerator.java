@@ -3,7 +3,7 @@ package cz.vutbr.feec.nn;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import cz.vutbr.feec.nn.Interfaces.IFileGenerator;
+import cz.vutbr.feec.nn.interfaces.IFileGenerator;
 
 public class FileGenerator implements IFileGenerator {
 	private String fileName;

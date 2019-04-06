@@ -1,4 +1,4 @@
-package Graph;
+package graph;
 
 public class Node {
 
@@ -11,6 +11,11 @@ public class Node {
 
 	public int getID() {
 		return ID;
+	}
+	
+	@Override
+	public String toString() {
+		return "Node with ID: "+ID;
 	}
 	
 }
