@@ -20,3 +20,5 @@ neuralnetworkgenerator.code-workspace
 env/
 bin/
 .vscode/
+/.idea
+/bin

@@ -15,7 +15,7 @@ public class NetworkGenerator implements INetworkGenerator {
 	public ArrayList<String> merges1D;
 	public ArrayList<String> merges2D;
 	public Boolean flattened = false;
-	private int neuronsUpperBound = 150;
+	private int neuronsUpperBound = 100;
 
 	/**
 	 * Creates network of randomly generated layers
@@ -55,22 +55,22 @@ public class NetworkGenerator implements INetworkGenerator {
 				case 1: // dimensions == 1
 					if (rnd < 0.50) {
 						layer[i] = new DenseLayer(i, this, neuronsUpperBound);
-					} else if (rnd < 0.90 && layer[i - 1].getLayerType() != "BatchNormalization") {
+					} else if (rnd < 0.90 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
 						layer[i] = new BatchNormalization(i, this);
-					} else if (rnd <= 1 && layer[i - 1].getLayerType() != "Dropout") {
+					} else if (rnd <= 1 && !layer[i - 1].getLayerType().equals("Dropout")) {
 						layer[i] = new Dropout(i, this);
 					}
 					break;
 				case 2: // dimensions == 2
 					if (rnd < 0.20 && layer[i - 1].shape0 > 2) { // 20 % probability
 						layer[i] = new Conv1DLayer(i, this, neuronsUpperBound);
-					} else if (rnd < 0.40 && layer[i - 1].getLayerType() != "MnistBlock") { // making sure mnist blocks
+					} else if (rnd < 0.40 && !layer[i - 1].getLayerType().equals("MnistBlock")) { // making sure mnist blocks
 																							// wont
 																							// follow each other
 						layer[i] = new MnistBlock(i, this, neuronsUpperBound);
-					} else if (rnd < 0.25 && layer[i - 1].getLayerType() != "Dropout") {
+					} else if (rnd < 0.25 && !layer[i - 1].getLayerType().equals("Dropout")) {
 						layer[i] = new Dropout(i, this);
-					} else if (rnd < 0.60 && layer[i - 1].getLayerType() != "BatchNormalization") {
+					} else if (rnd < 0.60 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
 						layer[i] = new BatchNormalization(i, this);
 					} else if (rnd < 0.80) {
 						layer[i] = new DenseLayer(i, this, neuronsUpperBound);
@@ -89,21 +89,21 @@ public class NetworkGenerator implements INetworkGenerator {
 								layer[i] = new InceptionVn(i, this, neuronsUpperBound);
 							}
 						} else if (rnd < 0.50 && layer[i - 1].shape0 > 2 && layer[i - 1].shape1 > 2
-								&& layer[i - 1].getLayerType() != "Conv2D") {
+								&& !layer[i - 1].getLayerType().equals("Conv2D")) {
 							layer[i] = new Conv2DLayer(i, this, 90);
 						} else if (rnd < 0.20 && layer[i - 1].shape0 > 10 && layer[i - 1].shape1 > 10
-								&& layer[i - 1].getLayerType() != "ConvBlock") {
-							layer[i] = new ConvBlock(i, this);
+								&& !layer[i - 1].getLayerType().equals("ConvBlock")) {
+							layer[i] = new ConvBlock(i, this, neuronsUpperBound);
 						} else if (rnd < 1 && layer[i - 1].shape0 > 10 && layer[i - 1].shape1 > 10
-								&& layer[i - 1].getLayerType() == "Conv2D") {
+								&& layer[i - 1].getLayerType().equals("Conv2D")) {
 							layer[i] = new MaxPooling2D(i, this);
 						} else {
 							layer[i] = new FlattenLayer(i, this);
 						}
 					} else {
-						if (rnd < 0.30 && layer[i - 1].getLayerType() != "Dropout") {
+						if (rnd < 0.30 && !layer[i - 1].getLayerType().equals("Dropout")) {
 							layer[i] = new Dropout(i, this);
-						} else if (rnd < 0.60 && rnd > 0.80 && layer[i - 1].getLayerType() != "BatchNormalization") {
+						} else if (rnd < 0.60 && rnd > 0.80 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
 							layer[i] = new BatchNormalization(i, this);
 						} else {
 							layer[i] = new DenseLayer(i, this, 100);
@@ -119,11 +119,7 @@ public class NetworkGenerator implements INetworkGenerator {
 	}
 	
 	private boolean isMergable(int layerNumber, double chance) {
-		if (layerNumber > (layer.length / 4) && chance > 0.50 && canMerge(layerNumber) && layer[layerNumber - 1].getLayerType() != "Concatenate") {
-			return true;
-		} else {
-			return false;
-		}
+		return layerNumber > (layer.length / 4) && chance > 0.50 && canMerge(layerNumber) && !layer[layerNumber - 1].getLayerType().equals("Concatenate");
 	}
 
 	/**
@@ -166,11 +162,11 @@ public class NetworkGenerator implements INetworkGenerator {
 	}
 
 	private String appendLastLayers(StringBuilder str, TreeSet<AbstractLayer> set) {
-		if (outputShape != "siamese") {
-			if (flattened == true) {
+		if (!outputShape.equals("siamese")) {
+			if (flattened) {
 				str.append("layer_last = Dense(" + outputShape + ", activation='sigmoid')(" + set.last().getLayerId()
 						+ ")\n");
-				str.append("model = Model(inputs=" + set.first().getLayerId() + ", outputs=layer_last)");
+				str.append("model = Model(inputs=").append(set.first().getLayerId()).append(", outputs=layer_last)");
 				return str.toString();
 			} else {
 				str.append("flatten = Flatten()(" + set.last().getLayerId() + ")\n");
@@ -179,7 +175,7 @@ public class NetworkGenerator implements INetworkGenerator {
 				return str.toString();
 			}
 		} else {
-			if (flattened == true) {
+			if (flattened) {
 				str.append("model = Model(inputs=" + set.first().getLayerId() + ", outputs= " + set.last().getLayerId()
 						+ ")\n");
 			} else {
@@ -203,7 +199,7 @@ public class NetworkGenerator implements INetworkGenerator {
 	}
 
 	private void appendImports(StringBuilder str) {
-		str.append("# Generated by network generator --- created by T.Hipca, 2018, as a part of semestral thesis\n");
+		str.append("# Generated by network generator --- created by T.Hipca, 2019, as a part of masters thesis\n");
 		str.append("from keras.models import Model\n");
 		str.append("from keras.layers import Input\n");
 		str.append("from keras.layers import Dense\n");
@@ -240,9 +236,9 @@ public class NetworkGenerator implements INetworkGenerator {
 	 */
 	public String getInputShapeAsString() {
 		ArrayList<Integer> temp = new ArrayList<>();
-		for (int i = 0; i < inputShape.length; i++) {
-			if (inputShape[i] != 0) {
-				temp.add(inputShape[i]);
+		for (Integer integer : inputShape) {
+			if (integer != 0) {
+				temp.add(integer);
 			}
 		}
 		return "shape=(" + temp.toString() + ")";
@@ -275,7 +271,7 @@ public class NetworkGenerator implements INetworkGenerator {
 			Integer temp0 = shapeList0.get(i);
 			Integer temp1 = shapeList1.get(i);
 			for (int j = i + 1; j < shapeList0.size(); j++) {
-				if (temp0 == shapeList0.get(j) && temp1 == shapeList1.get(j)) {
+				if (temp0.equals(shapeList0.get(j)) && temp1.equals(shapeList1.get(j))) {
 					StringBuilder m = new StringBuilder();
 					m.append("layer_" + String.format("%03d", layer[j + 2].id));
 					m.append(", layer_" + String.format("%03d", layer[i + 2].id));
@@ -301,10 +297,7 @@ public class NetworkGenerator implements INetworkGenerator {
 				}
 			}
 		}
-		if (merges1D.isEmpty() || merges2D.isEmpty()) {
-			return false;
-		}
-		return true;
+		return !merges1D.isEmpty() && !merges2D.isEmpty();
 	}
 
 }

@@ -27,27 +27,15 @@ public class Edge {
 	} 
 	
 	public boolean startsAtNode(Node node) {
-		if (nodes.get(0) == node) {
-			return true;
-		}else {
-			return false;
-		}
+		return nodes.get(0) == node;
 	}
 	
 	public boolean endsAtNode(Node node) {
-		if (nodes.get(1) == node) {
-			return true;
-		}else {
-			return false;
-		}
+		return nodes.get(1) == node;
 	}
 	
 	public boolean containsNode(Node node) {
-		if (nodes.contains(node)) {
-			return true;
-		}else {
-			return false;
-		}
+		return nodes.contains(node);
 	}
 	
 	public void rewire(Node node) {

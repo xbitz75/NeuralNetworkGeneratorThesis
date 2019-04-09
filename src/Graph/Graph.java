@@ -6,7 +6,6 @@ import java.util.Random;
 
 public class Graph {
 
-	private IDGenerator idGenerator;
 	private ArrayList<Edge> edgeTable;
 	private ArrayList<Node> nodes;
 	private int numberOfNeighbors;
@@ -54,7 +53,7 @@ public class Graph {
 	}
 
 	private void generateNodes() {
-		idGenerator = new IDGenerator();
+		IDGenerator idGenerator = new IDGenerator();
 		edgeTable = new ArrayList<>();
 		nodes = new ArrayList<>();
 		for (int i = 0; i < numberOfNodes; i++) {
@@ -64,6 +63,15 @@ public class Graph {
 
 	public ArrayList<Node> getNodes() {
 		return nodes;
+	}
+	
+	public Node getNodesByID(int ID) {
+		for (Node node : nodes) {
+			if (node.getID() == ID) {
+				return node;
+			}
+		}
+		return null;
 	}
 
 	public ArrayList<Edge> getEdges() {
@@ -78,7 +86,21 @@ public class Graph {
 			}
 		}
 		if (result.isEmpty()) {
-			throw new IllegalAccessError("no such edges");
+			return null;
+		} else {
+			return result;
+		}
+	}
+	
+	public ArrayList<Edge> getEdgesEndingAt(Node node) {
+		ArrayList<Edge> result = new ArrayList<>();
+		for (Edge edge : edgeTable) {
+			if (edge.endsAtNode(node)) {
+				result.add(edge);
+			}
+		}
+		if (result.isEmpty()) {
+			return null;
 		} else {
 			return result;
 		}
@@ -92,7 +114,7 @@ public class Graph {
 			}
 		}
 		if (result.isEmpty()) {
-			throw new IllegalAccessError("no such edges");
+			return null;
 		} else {
 			return result;
 		}
@@ -106,7 +128,7 @@ public class Graph {
 			}
 		}
 		if (result.isEmpty()) {
-			throw new IllegalAccessError("no such edges");
+			return null;
 		} else {
 			return result;
 		}
@@ -120,7 +142,7 @@ public class Graph {
 				edge.getNodes().set(0, temp);
 			}
 		}
-		Collections.sort(edgeTable, new EdgeComparator());
+		edgeTable.sort(new EdgeComparator());
 	}
 
 	public boolean containsEdge(Edge edge) {

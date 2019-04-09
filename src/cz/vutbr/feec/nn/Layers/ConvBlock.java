@@ -17,10 +17,10 @@ public class ConvBlock extends AbstractLayer {
 	private String kernelSize = "(3, 3)";
 	private ACTIVATION activation;
 
-	public ConvBlock(int id, NetworkGenerator network) {
+	public ConvBlock(int id, NetworkGenerator network, int neuronsUpperBound) {
 		super(id, network);
 		this.droupoutRate = (float) (Math.random() / 2); // randomly generated rate parameter for dropout
-		this.neurons = (int) Math.round((Math.random() * ((200 - 20) + 1)) + 20); // randomly generated amount of
+		this.neurons = (int) Math.round((Math.random() * ((neuronsUpperBound - 10) + 1)) + 10); // randomly generated amount of
 																					// neurons
 		layerType = "ConvBlock";
 		createConnections();

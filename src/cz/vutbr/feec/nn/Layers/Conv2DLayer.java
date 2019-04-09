@@ -35,7 +35,7 @@ public class Conv2DLayer extends AbstractLayer {
 	@Override
 	protected void createConnections() {
 		activation = ACTIVATION.values()[new Random().nextInt(ACTIVATION.values().length)];
-		neurons = new Random().nextInt(neuronsUpperBound) + 60;
+		neurons = new Random().nextInt(neuronsUpperBound) + 1;
 		for (int i = 0; i < prevLayers.size(); i++) {
 			setPrevLayers(i);
 		}
