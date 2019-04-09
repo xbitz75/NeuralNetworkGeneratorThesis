@@ -2,9 +2,9 @@ package cz.vutbr.feec.nn;
 
 import java.util.ArrayList;
 
-import graph.Edge;
-import graph.Graph;
-import graph.Node;
+import Graph.Edge;
+import Graph.Graph;
+import Graph.Node;
 
 public class GraphExample {
 

@@ -1,4 +1,4 @@
-package cz.vutbr.feec.nn.layers;
+package cz.vutbr.feec.nn.Layers;
 
 import cz.vutbr.feec.nn.NetworkGenerator;
 

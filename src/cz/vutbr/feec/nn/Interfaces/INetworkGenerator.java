@@ -1,4 +1,4 @@
-package cz.vutbr.feec.nn.interfaces;
+package cz.vutbr.feec.nn.Interfaces;
 
 public interface INetworkGenerator {
 	
