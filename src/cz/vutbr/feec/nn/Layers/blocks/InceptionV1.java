@@ -1,5 +1,6 @@
-package cz.vutbr.feec.nn.Layers;
+package cz.vutbr.feec.nn.Layers.blocks;
 
+import cz.vutbr.feec.nn.Layers.AbstractLayer;
 import cz.vutbr.feec.nn.NetworkGenerator;
 
 public class InceptionV1 extends AbstractLayer {

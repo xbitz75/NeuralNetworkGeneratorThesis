@@ -1,18 +1,18 @@
 package cz.vutbr.feec.nn;
 
 import java.io.IOException;
+import java.util.stream.IntStream;
 
 public class GeneratorExample {
-	private static int models;
 	private static int capacity;
 	private static int dimensions;
 	private static String outputShape;
 	private static Integer[] inputShape;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 
 		// Network parameters
-		models = 5; // number of generated models
+		int models = 5; // number of generated models
 		capacity = 15; // number of layers/blocks per model
 		inputShape = new Integer[] { 128, 128, 3, 0 }; // input
 		dimensions = 3; // number of inputs dimensions
@@ -28,17 +28,17 @@ public class GeneratorExample {
 	 * 			  - number of generated models
 	 **/
 	private static void generate(int models) {
-		for (int i = 0; i < models; i++) {
+		IntStream.range(0, models).forEach(i -> {
 			NetworkGenerator networkGenerator = new NetworkGenerator(capacity, dimensions, inputShape, outputShape);
 			String code = networkGenerator.build();
-			FileGenerator fileGenerator = new FileGenerator("python_model_" + i + ".py", code);
+			FileGenerator fileGenerator = new FileGenerator(String.format("python_model_%d.py", i), code);
 			try {
 				fileGenerator.generateFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				System.out.println("file generator failed");
 				e.printStackTrace();
 			}
-		}
+		});
 	}	
 	
 	

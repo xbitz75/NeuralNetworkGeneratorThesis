@@ -6,6 +6,10 @@ import java.util.LinkedList;
 import java.util.TreeSet;
 import cz.vutbr.feec.nn.Interfaces.INetworkGenerator;
 import cz.vutbr.feec.nn.Layers.*;
+import cz.vutbr.feec.nn.Layers.blocks.ConvBlock;
+import cz.vutbr.feec.nn.Layers.blocks.InceptionV1;
+import cz.vutbr.feec.nn.Layers.blocks.InceptionVn;
+import cz.vutbr.feec.nn.Layers.blocks.MnistBlock;
 
 public class NetworkGenerator implements INetworkGenerator {
 	private AbstractLayer[] layer;
@@ -15,7 +19,7 @@ public class NetworkGenerator implements INetworkGenerator {
 	public ArrayList<String> merges1D;
 	public ArrayList<String> merges2D;
 	public Boolean flattened = false;
-	private int neuronsUpperBound = 100;
+	private int neuronsUpperBound = 80;
 
 	/**
 	 * Creates network of randomly generated layers

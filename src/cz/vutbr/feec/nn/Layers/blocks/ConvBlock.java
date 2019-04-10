@@ -1,7 +1,8 @@
-package cz.vutbr.feec.nn.Layers;
+package cz.vutbr.feec.nn.Layers.blocks;
 
 import java.util.Random;
 
+import cz.vutbr.feec.nn.Layers.AbstractLayer;
 import cz.vutbr.feec.nn.NetworkGenerator;
 
 public class ConvBlock extends AbstractLayer {
