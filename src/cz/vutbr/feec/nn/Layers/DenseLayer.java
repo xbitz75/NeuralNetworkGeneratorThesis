@@ -36,7 +36,7 @@ public class DenseLayer extends AbstractLayer {
 	}
 
 	// randomly selects activation function and number of neurons, fills list of
-	// previous layers
+	// previous Layers
 	@Override
 	protected void createConnections() {
 		activation = ACTIVATION.values()[new Random().nextInt(ACTIVATION.values().length)];

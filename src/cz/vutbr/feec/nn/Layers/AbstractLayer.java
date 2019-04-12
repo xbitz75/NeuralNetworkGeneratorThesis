@@ -33,7 +33,7 @@ public abstract class AbstractLayer {
 
 	protected abstract void createConnections();
 	
-	public String getLayerType() { // each layer saves its type, this enables to control which layers cannot follow each other
+	public String getLayerType() { // each layer saves its type, this enables to control which Layers cannot follow each other
 		return layerType;
 	}
 
@@ -43,7 +43,7 @@ public abstract class AbstractLayer {
 	}
 
 
-	// returns list of previous layers
+	// returns list of previous Layers
 	public AbstractLayer[] getPreviousLayers() {
 		if (id == 0) {
 			return new AbstractLayer[0];
@@ -55,7 +55,7 @@ public abstract class AbstractLayer {
 		return res;
 	}
 
-	// Makes list of previous layers
+	// Makes list of previous Layers
 	public void setPrevLayers(int index) {
 		int prevLayerId;
 		if (this.id == 0) {

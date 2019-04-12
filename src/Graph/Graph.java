@@ -39,7 +39,7 @@ public class Graph {
 					tempEdge = new Edge(nodes.get(i), nodes.get(i + j));
 				}
 				edgeTable.add(tempEdge);
-				// undirected graph
+				// undirected Graph
 				// Edge tempEdge2;
 				// int diff = i - j;
 				// if (diff < 0) {

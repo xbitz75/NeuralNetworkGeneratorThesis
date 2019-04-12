@@ -31,7 +31,7 @@ public class Conv2DLayer extends AbstractLayer {
 				+ activation + "')(" + getPreviousLayers()[0].getLayerId() + ")";
 	}
 
-	// randomly selects activation function and number of neurons, fills list of previous layers
+	// randomly selects activation function and number of neurons, fills list of previous Layers
 	@Override
 	protected void createConnections() {
 		activation = ACTIVATION.values()[new Random().nextInt(ACTIVATION.values().length)];

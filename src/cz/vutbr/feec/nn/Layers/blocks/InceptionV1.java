@@ -22,10 +22,10 @@ public class InceptionV1 extends AbstractLayer {
 
 	@Override
 	public String build() {
-		return "InceptionV1_1x1 = Conv2D(" + neurons1 + ", (1, 1), padding=\"same\", activation=\"relu\")(" + getPreviousLayers()[0].getLayerId() + ")\n" 
-				+ "InceptionV1_3x3_redu = Conv2D(" + (int)neurons2/2 + ", (1, 1), padding=\"same\", activation=\"relu\")(" + getPreviousLayers()[0].getLayerId() + ")\n"
+		return "InceptionV1_1x1 = Conv2D(" + neurons1 + ", (1, 1), padding=\"same\", activation=\"relu\")(" + getPreviousLayers()[0].getLayerId() + ")\n"
+				+ "InceptionV1_3x3_redu = Conv2D(" + Math.floorDiv(neurons2, 2) + ", (1, 1), padding=\"same\", activation=\"relu\")(" + getPreviousLayers()[0].getLayerId() + ")\n"
 				+ "InceptionV1_3x3 = Conv2D(" + neurons2 + ", (3, 3), padding=\"same\", activation=\"relu\")(InceptionV1_3x3_redu)\n"
-				+ "InceptionV1_5x5_redu = Conv2D(" + (int)neurons3/2 + ", (5, 5), padding=\"same\", activation=\"relu\")(" + getPreviousLayers()[0].getLayerId() + ")\n"
+				+ "InceptionV1_5x5_redu = Conv2D(" + Math.floorDiv(neurons3, 2)+ ", (5, 5), padding=\"same\", activation=\"relu\")(" + getPreviousLayers()[0].getLayerId() + ")\n"
 				+ "InceptionV1_5x5 = Conv2D(" + neurons3 + ", (5, 5), padding=\"same\", activation=\"relu\")(InceptionV1_5x5_redu)\n"
 				//+ "InceptionV1_max = MaxPooling2D(pool_size=(3,3))(" + getPreviousLayers()[0].getLayerId() + ")\n"
 				//+ "InceptionV1_con = Conv2D(" + neurons3 + ", (1, 1), padding=\"same\", activation=\"relu\")(InceptionV1_max)\n"

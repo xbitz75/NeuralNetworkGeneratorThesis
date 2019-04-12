@@ -2,7 +2,7 @@ package cz.vutbr.feec.nn.Layers;
 
 import cz.vutbr.feec.nn.NetworkGenerator;
 
-public class Concatenate extends AbstractLayer {
+public class Concatenate extends cz.vutbr.feec.nn.Layers.AbstractLayer {
 	private String merge;
 
 	public Concatenate(int id, NetworkGenerator network) {
