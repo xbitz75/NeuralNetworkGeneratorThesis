@@ -6,10 +6,7 @@ import java.util.LinkedList;
 import java.util.TreeSet;
 import cz.vutbr.feec.nn.Interfaces.INetworkGenerator;
 import cz.vutbr.feec.nn.Layers.*;
-import cz.vutbr.feec.nn.Layers.blocks.ConvBlock;
-import cz.vutbr.feec.nn.Layers.blocks.InceptionV1;
-import cz.vutbr.feec.nn.Layers.blocks.InceptionVn;
-import cz.vutbr.feec.nn.Layers.blocks.MnistBlock;
+import cz.vutbr.feec.nn.Layers.blocks.*;
 
 public class NetworkGenerator implements INetworkGenerator {
 	private AbstractLayer[] layer;
@@ -87,8 +84,10 @@ public class NetworkGenerator implements INetworkGenerator {
 				case 3: // dimensions == 3
 					if (i < (layer.length * 0.75)) {
 						if (rnd >= 0.50) {
-							if (rnd < 0.75) {
+							if (rnd < 0.66) {
 								layer[i] = new InceptionV1(i, this, neuronsUpperBound);
+							} else if (rnd < 0.82) {
+								layer[i] = new ResidualBlock(i, this, neuronsUpperBound);
 							} else {
 								layer[i] = new InceptionVn(i, this, neuronsUpperBound);
 							}
@@ -215,6 +214,7 @@ public class NetworkGenerator implements INetworkGenerator {
 		str.append("from keras.Layers import MaxPooling1D\n");
 		str.append("from keras.Layers import MaxPooling2D\n");
 		str.append("from keras.Layers.merge import concatenate\n");
+		str.append("from keras.Layers import Add\n");
 		str.append("\n");
 	}
 
