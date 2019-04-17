@@ -16,11 +16,11 @@ public class NetworkGenerator implements INetworkGenerator {
 	public ArrayList<String> merges1D;
 	public ArrayList<String> merges2D;
 	public Boolean flattened = false;
-	private int neuronsUpperBound = 80;
+	private int neuronsUpperBound = 150;
 
 	/**
 	 * Creates network of randomly generated Layers
-	 * 
+	 *
 	 * @param capacity
 	 *            - number of generated Layers
 	 * @param dimensions
@@ -48,6 +48,7 @@ public class NetworkGenerator implements INetworkGenerator {
 
 	private void generateRest(String outputShape, int neuronsUpperBound) {
 		for (int i = 2; i < layer.length; i++) {
+		    gradualIncreaseOfNeuronsUpperBound(i);
 			double rnd = Math.random();
 			if (isMergable(i, rnd)) {
 				layer[i] = new Concatenate(i, this);
@@ -55,7 +56,7 @@ public class NetworkGenerator implements INetworkGenerator {
 				switch (getDimensions()) {
 				case 1: // dimensions == 1
 					if (rnd < 0.50) {
-						layer[i] = new DenseLayer(i, this, neuronsUpperBound);
+						layer[i] = new DenseLayer(i, this, 1000);
 					} else if (rnd < 0.90 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
 						layer[i] = new BatchNormalization(i, this);
 					} else if (rnd <= 1 && !layer[i - 1].getLayerType().equals("Dropout")) {
@@ -109,7 +110,7 @@ public class NetworkGenerator implements INetworkGenerator {
 						} else if (rnd < 0.60 && rnd > 0.80 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
 							layer[i] = new BatchNormalization(i, this);
 						} else {
-							layer[i] = new DenseLayer(i, this, 100);
+							layer[i] = new DenseLayer(i, this, 1000);
 						}
 					}
 					break;
@@ -120,14 +121,27 @@ public class NetworkGenerator implements INetworkGenerator {
 		}
 		this.outputShape = outputShape;
 	}
-	
+
+	private void gradualIncreaseOfNeuronsUpperBound(int i) {
+		if (i < layer.length/3) {
+			neuronsUpperBound = 100;
+		}
+        if (i >= layer.length/2) {
+            neuronsUpperBound = 300;
+        }
+        if (i > layer.length/2) {
+            neuronsUpperBound = 600;
+        }
+	}
+
+
 	private boolean isMergable(int layerNumber, double chance) {
 		return layerNumber > (layer.length / 4) && chance > 0.50 && canMerge(layerNumber) && !layer[layerNumber - 1].getLayerType().equals("Concatenate");
 	}
 
 	/**
 	 * Generates string with python code used to generate network
-	 * 
+	 *
 	 * @return String with code
 	 */
 	public String build() {
@@ -220,7 +234,7 @@ public class NetworkGenerator implements INetworkGenerator {
 
 	/**
 	 * Returns specific layer based on the id given
-	 * 
+	 *
 	 * @param id
 	 *            - id of layer
 	 * @return layer with specific id
@@ -235,7 +249,7 @@ public class NetworkGenerator implements INetworkGenerator {
 
 	/**
 	 * Converts inputShape to a String
-	 * 
+	 *
 	 * @return Input shape as a String
 	 */
 	public String getInputShapeAsString() {
@@ -259,7 +273,7 @@ public class NetworkGenerator implements INetworkGenerator {
 
 	/**
 	 * Creates LinkedList of possible Layers to merge
-	 * 
+	 *
 	 * @param layerNumber
 	 *            - number of layer from which previous Layers are checked
 	 * @return Boolean, true when there are possible merges

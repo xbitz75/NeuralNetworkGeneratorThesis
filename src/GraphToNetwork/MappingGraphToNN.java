@@ -1,4 +1,6 @@
-package Graph;
+package GraphToNetwork;
+
+import Graph.Graph;
 
 public class MappingGraphToNN {
 
