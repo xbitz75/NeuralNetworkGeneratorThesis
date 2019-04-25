@@ -37,7 +37,7 @@ public class ConvBlock extends AbstractLayer {
 	public String build() {
 		return "conv_block01 = Conv2D(" + neurons + ", " + kernelSize + ", padding=\"same\", activation=\"" + activation
 				+ "\")(" + getPreviousLayers()[0].getLayerId() + ")\n" + "conv_block02 = Conv2D(" + neurons + ", "
-				+ kernelSize + ", activation=\"" + activation + "\")(conv_block01)\n"
+				+ kernelSize + ", activation=\"" + activation + "\", padding=\"same\")(conv_block01)\n"
 				+ "conv_block03 = MaxPooling2D(pool_size=(2,2))(conv_block02)\n" + "layer_" + String.format("%03d", id)
 				+ " = Dropout(" + droupoutRate + ")(conv_block03) # last Conv block";
 	}

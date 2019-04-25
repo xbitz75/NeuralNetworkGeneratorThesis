@@ -28,7 +28,7 @@ public class Conv2DLayer extends AbstractLayer {
 	@Override
 	public String build() {
 		return "layer_" + String.format("%03d", id) + " = Conv2D(" + neurons + ", " + kernelSize + ", activation='"
-				+ activation + "')(" + getPreviousLayers()[0].getLayerId() + ")";
+				+ activation + "', padding=\"same\")(" + getPreviousLayers()[0].getLayerId() + ")";
 	}
 
 	// randomly selects activation function and number of neurons, fills list of previous Layers

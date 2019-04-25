@@ -23,12 +23,12 @@ public class ResidualBlock extends cz.vutbr.feec.nn.Layers.AbstractLayer {
 
     @Override
     public String build() {
-        return "Residual_1 = Conv2D(" + neurons + ", (1, 1), padding=\"same\",)(" + getPreviousLayers()[0].getLayerId() + ")\n"
+        return "Residual_1 = Conv2D(" + neurons + ", (1, 1), padding=\"same\")(" + getPreviousLayers()[0].getLayerId() + ")\n"
         + "Residual_2 = BatchNormalization()(Residual_1)\n"
         + "Residual_3 = Conv2D(" + neurons + ", (3, 3), padding=\"same\", strides=1)(Residual_2)\n"
         + "Residual_4 = BatchNormalization()(Residual_3)\n"
-        + "Residual_5 = MaxPooling2D((3, 3)(Residual_4)\n"
-        + "layer_" + String.format("%03d", id)+ " = Add([Residual_1, layer_" + String.format("%03d", id)+" # last ResidualBlock Layer";
+        + "Residual_5 = MaxPooling2D((3, 3))(Residual_4)\n"
+        + "layer_" + String.format("%03d", id)+ " = Add()([Residual_1, Residual_5]) # last ResidualBlock Layer";
 
 
         // first layer is convolutional 1x1
