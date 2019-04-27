@@ -47,71 +47,64 @@ public class NetworkGenerator implements INetworkGenerator {
         for (int i = 2; i < layer.length; i++) {
             gradualIncreaseOfNeuronsUpperBound(i);
             double rnd = Math.random();
-            if (isMergable(i, rnd)) {
-                layer[i] = new Concatenate(i, this);
-            } else {
-                switch (getDimensions()) {
-                    case 1: // dimensions == 1
-                        if (rnd < 0.50) {
-                            layer[i] = new DenseLayer(i, this, 1000);
-                        } else if (rnd < 0.90 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
-                            layer[i] = new BatchNormalization(i, this);
-                        } else if (rnd <= 1 && !layer[i - 1].getLayerType().equals("Dropout")) {
-                            layer[i] = new Dropout(i, this);
-                        }
-                        break;
-                    case 2: // dimensions == 2
-                        if (rnd < 0.20 && layer[i - 1].shape0 > 2) { // 20 % probability
-                            layer[i] = new Conv1DLayer(i, this, neuronsUpperBound);
-                        } else if (rnd < 0.40 && !layer[i - 1].getLayerType().equals("MnistBlock")) { // making sure mnist blocks
-                            // wont
-                            // follow each other
-                            layer[i] = new MnistBlock(i, this, neuronsUpperBound);
-                        } else if (rnd < 0.25 && !layer[i - 1].getLayerType().equals("Dropout")) {
-                            layer[i] = new Dropout(i, this);
-                        } else if (rnd < 0.60 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
-                            layer[i] = new BatchNormalization(i, this);
-                        } else if (rnd < 0.80) {
-                            layer[i] = new DenseLayer(i, this, neuronsUpperBound);
-                        } else if (rnd < 0.90 && layer[i - 1].shape0 > 10) {
-                            layer[i] = new MaxPooling1D(i, this);
+            switch (getDimensions()) {
+                case 1:
+                    if (rnd > 0.70 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
+                        layer[i] = new BatchNormalization(i, this);
+                    } else if (rnd >= 0.70 && !layer[i - 1].getLayerType().equals("Dropout")) {
+                        layer[i] = new Dropout(i, this);
+                    } else {
+                        layer[i] = new DenseLayer(i, this, 1000);
+                    }
+                    break;
+                case 2:
+                    if (rnd < 0.20 && layer[i - 1].shape0 > 2) { // 20 % probability
+                        layer[i] = new Conv1DLayer(i, this, neuronsUpperBound);
+                    } else if (rnd < 0.40 && !layer[i - 1].getLayerType().equals("MnistBlock")) { // making sure mnist blocks
+                        // wont
+                        // follow each other
+                        layer[i] = new MnistBlock(i, this, neuronsUpperBound);
+                    } else if (rnd < 0.25 && !layer[i - 1].getLayerType().equals("Dropout")) {
+                        layer[i] = new Dropout(i, this);
+                    } else if (rnd < 0.60 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
+                        layer[i] = new BatchNormalization(i, this);
+                    } else if (rnd < 0.80) {
+                        layer[i] = new DenseLayer(i, this, neuronsUpperBound);
+                    } else if (rnd < 0.90 && layer[i - 1].shape0 > 10) {
+                        layer[i] = new MaxPooling1D(i, this);
+                    } else {
+                        layer[i] = new FlattenLayer(i, this);
+                    }
+                    break;
+                case 3:
+                    if (i < (layer.length * 0.75)) {
+                        if (rnd >= 0.50) {
+                            if (rnd < 0.75) {
+                                layer[i] = new InceptionV1(i, this, neuronsUpperBound);
+                            } else {
+                                layer[i] = new InceptionVn(i, this, neuronsUpperBound);
+                            }
+                        } else if (rnd < 0.50 && !layer[i - 1].getLayerType().equals("Conv2D")) {
+                            layer[i] = new Conv2DLayer(i, this, 90);
+                        } else if (rnd < 0.20 && !layer[i - 1].getLayerType().equals("ConvBlock")) {
+                            layer[i] = new ConvBlock(i, this, neuronsUpperBound);
+                        } else if (rnd < 1 && layer[i - 1].getLayerType().equals("Conv2D")) {
+                            layer[i] = new MaxPooling2D(i, this);
                         } else {
                             layer[i] = new FlattenLayer(i, this);
                         }
-                        break;
-                    case 3: // dimensions == 3
-                        if (i < (layer.length * 0.75)) {
-                            if (rnd >= 0.50) {
-                                if (rnd < 0.75) {
-                                    layer[i] = new InceptionV1(i, this, neuronsUpperBound);
-                                } else {
-                                    layer[i] = new InceptionVn(i, this, neuronsUpperBound);
-                                }
-                            } else if (rnd < 0.50 && layer[i - 1].shape0 > 2 && layer[i - 1].shape1 > 2
-                                    && !layer[i - 1].getLayerType().equals("Conv2D")) {
-                                layer[i] = new Conv2DLayer(i, this, 90);
-                            } else if (rnd < 0.20 && layer[i - 1].shape0 > 10 && layer[i - 1].shape1 > 10
-                                    && !layer[i - 1].getLayerType().equals("ConvBlock")) {
-                                layer[i] = new ConvBlock(i, this, neuronsUpperBound);
-                            } else if (rnd < 1 && layer[i - 1].shape0 > 10 && layer[i - 1].shape1 > 10
-                                    && layer[i - 1].getLayerType().equals("Conv2D")) {
-                                layer[i] = new MaxPooling2D(i, this);
-                            } else {
-                                layer[i] = new FlattenLayer(i, this);
-                            }
+                    } else {
+                        if (rnd < 0.30 && !layer[i - 1].getLayerType().equals("Dropout")) {
+                            layer[i] = new Dropout(i, this);
+                        } else if (rnd < 0.60 && rnd > 0.80 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
+                            layer[i] = new BatchNormalization(i, this);
                         } else {
-                            if (rnd < 0.30 && !layer[i - 1].getLayerType().equals("Dropout")) {
-                                layer[i] = new Dropout(i, this);
-                            } else if (rnd < 0.60 && rnd > 0.80 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
-                                layer[i] = new BatchNormalization(i, this);
-                            } else {
-                                layer[i] = new DenseLayer(i, this, 1000);
-                            }
+                            layer[i] = new DenseLayer(i, this, 1000);
                         }
-                        break;
-                    default:
-                        break;
-                }
+                    }
+                    break;
+                default:
+                    break;
             }
         }
         this.outputShape = outputShape;
@@ -314,87 +307,3 @@ public class NetworkGenerator implements INetworkGenerator {
     }
 
 }
-
-// old version without inception
-
-// public NetworkGenerator(int capacity, int dimensions, Integer[] inputShape,
-// String outputShape) {
-// this.dimensions = dimensions;
-// this.inputShape = inputShape;
-// merges = new ArrayList<>();
-// layer = new Layer[capacity];
-// layer[0] = new InputLayer(0, this); // input layer creation
-// if (getDimensions() == 2) {
-// layer[1] = new Conv1DLayer(1, this, 20); // first hidden layer
-// } else if (getDimensions() == 3) {
-// layer[1] = new Conv2DLayer(1, this, 20); // first hidden layer
-// }
-// for (int i = 2; i < layer.length; i++) {
-// double rnd = Math.random();
-// if (i > (layer.length / 2) && rnd > 0.50 && canMerge(i) && layer[i -
-// 1].getLayerType() != "Concatenate") {
-// // System.out.println("Network can merge " + merge0 + " " + merge1); // debug
-// ||
-// // nevytvori se zadna vrstva
-// // proto null pointer
-// // layer[i] = new Dropout(i, this);
-// layer[i] = new Concatenate(i, this);
-// } else {
-// switch (getDimensions()) {
-// case 1: // dimensions == 1
-// if (rnd < 0.35) {
-// layer[i] = new DenseLayer(i, this, 20);
-// } else if (rnd < 0.70) {
-// layer[i] = new BatchNormalization(i, this);
-// } else if (rnd <= 1) {
-// layer[i] = new Dropout(i, this);
-// }
-// break;
-// case 2: // dimensions == 2
-// if (rnd < 0.20 && layer[i - 1].shape0 > 2) { // 20 % probability
-// layer[i] = new Conv1DLayer(i, this, 20);
-// // } else if (rnd < 0.30) {
-// // layer[i] = new Concatenate(i, this);
-// } else if (rnd < 0.40 && layer[i - 1].getLayerType() != "MnistBlock") { //
-// making sure mnist blocks
-// // wont
-// // follow each other
-// layer[i] = new MnistBlock(i, this);
-// } else if (rnd < 0.40) {
-// layer[i] = new Dropout(i, this);
-// } else if (rnd < 0.60) {
-// layer[i] = new BatchNormalization(i, this);
-// } else if (rnd < 0.80) {
-// layer[i] = new DenseLayer(i, this, 20);
-// } else if (rnd < 0.90 && layer[i - 1].shape0 > 10) {
-// layer[i] = new MaxPooling1D(i, this);
-// } else {
-// layer[i] = new FlattenLayer(i, this);
-// }
-// break;
-// case 3: // dimensions == 3
-// if (rnd < 0.20 && layer[i - 1].shape0 > 2 && layer[i - 1].shape1 > 2) {
-// layer[i] = new Conv2DLayer(i, this, 20);
-// } else if (rnd < 0.40 && layer[i - 1].shape0 > 10 && layer[i - 1].shape1 > 10
-// && layer[i - 1].getLayerType() != "ConvBlock") {
-// layer[i] = new ConvBlock(i, this);
-// } else if (rnd < 0.40) {
-// layer[i] = new DenseLayer(i, this, 20);
-// } else if (rnd < 0.50) {
-// layer[i] = new Dropout(i, this);
-// } else if (rnd < 0.80) {
-// layer[i] = new BatchNormalization(i, this);
-// } else if (rnd < 0.90 && layer[i - 1].shape0 > 10 && layer[i - 1].shape1 >
-// 10) {
-// layer[i] = new MaxPooling2D(i, this);
-// } else {
-// layer[i] = new FlattenLayer(i, this);
-// }
-// break;
-// default:
-// break;
-// }
-// }
-// }
-// this.outputShape = outputShape;
-// }

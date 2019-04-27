@@ -40,7 +40,7 @@ public class DenseLayer extends AbstractLayer {
 	@Override
 	protected void createConnections() {
 		activation = ACTIVATION.values()[new Random().nextInt(ACTIVATION.values().length)];
-		neurons = new Random().nextInt(neuronsUpperBound) + 1;
+		neurons = (int) Math.round((Math.random() * ((neuronsUpperBound - 100) + 1)) + 100);
 		for (int i = 0; i < prevLayers.size(); i++) {
 			setPrevLayers(i);
 		}

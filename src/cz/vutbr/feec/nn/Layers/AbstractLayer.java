@@ -77,7 +77,7 @@ public abstract class AbstractLayer {
 	Prints debug information to console
 	*/
 	public void debug() {
-		System.out.println("Debug: "+shape0+", "+shape1+", "+shape2+", "+shape3+" "+toString());
+		System.out.println("Debug: "+toString());
 	}
 
 }
