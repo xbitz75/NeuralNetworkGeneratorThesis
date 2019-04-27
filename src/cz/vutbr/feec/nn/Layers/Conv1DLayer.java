@@ -9,32 +9,29 @@ public class Conv1DLayer extends AbstractLayer {
 		relu, tanh, sigmoid
 	}
 
-	private int neuronsUpperBound;
-	private int neurons;
+	private int filters;
 	private int kernelSize = 3;
 	private ACTIVATION activation;
 
-	public Conv1DLayer(int id, NetworkGenerator network, int neuronsUpperBound) {
+	public Conv1DLayer(int id, NetworkGenerator network, int filters) {
 		super(id, network);
-		this.neuronsUpperBound = neuronsUpperBound;
+		this.filters = filters;
 		createConnections();
 		layerType = "Conv1D";
 		setShapesFromPrevLayer();
 		shape0 = shape0 - (kernelSize-1);
-		shape1 = neurons;
+		shape1 = this.filters;
 	}
 
 	@Override
 	public String build() {
-			return "layer_" + String.format("%03d", id) + " = Conv1D(" + neurons + ", " + kernelSize + ", activation='"
+			return "layer_" + String.format("%03d", id) + " = Conv1D(" + filters + ", " + kernelSize + ", activation='"
 					+ activation + "')(" + getPreviousLayers()[0].getLayerId() + ")";
 	}
 
-	// randomly selects activation function and number of neurons, fills list of previous Layers
 	@Override
 	protected void createConnections() {
 		activation = ACTIVATION.values()[new Random().nextInt(ACTIVATION.values().length)];
-		neurons = new Random().nextInt(neuronsUpperBound) + 1;
 		for (int i = 0; i < prevLayers.size(); i++) {
 			setPrevLayers(i);
 		}

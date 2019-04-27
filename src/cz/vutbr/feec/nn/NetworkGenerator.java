@@ -10,14 +10,14 @@ import cz.vutbr.feec.nn.Layers.*;
 import cz.vutbr.feec.nn.Layers.blocks.*;
 
 public class NetworkGenerator implements INetworkGenerator {
+    public ArrayList<String> merges1D;
+    public ArrayList<String> merges2D;
+    public Boolean flattened = false;
     private AbstractLayer[] layer;
     private Integer[] inputShape;
     private String outputShape;
     private Integer dimensions;
-    public ArrayList<String> merges1D;
-    public ArrayList<String> merges2D;
-    public Boolean flattened = false;
-    private int neuronsUpperBound = 150;
+    private int numOfFilters = 64;
 
     /**
      * Creates network of randomly generated Layers
@@ -35,11 +35,11 @@ public class NetworkGenerator implements INetworkGenerator {
         layer = new AbstractLayer[capacity];
         layer[0] = new InputLayer(0, this); // input layer creation
         if (getDimensions() == 2) {
-            layer[1] = new Conv1DLayer(1, this, neuronsUpperBound); // first hidden layer
+            layer[1] = new Conv1DLayer(1, this, numOfFilters); // first hidden layer
         } else if (getDimensions() == 3) {
-            layer[1] = new Conv2DLayer(1, this, neuronsUpperBound); // first hidden layer
+            layer[1] = new Conv2DLayer(1, this, numOfFilters); // first hidden layer
         }
-        generateRest(outputShape, neuronsUpperBound);
+        generateRest(outputShape, numOfFilters);
 
     }
 
@@ -111,14 +111,17 @@ public class NetworkGenerator implements INetworkGenerator {
     }
 
     private void gradualIncreaseOfNeuronsUpperBound(int i) {
-        if (i < layer.length / 3) {
-            neuronsUpperBound = 100;
+        if (i < layer.length * 0.25) {
+            numOfFilters = 64;
         }
-        if (i >= layer.length / 2) {
-            neuronsUpperBound = 300;
+        if (i < layer.length * 0.5) {
+            numOfFilters = 128;
         }
-        if (i > layer.length / 2) {
-            neuronsUpperBound = 600;
+        if (i < layer.length * 0.75) {
+            numOfFilters = 256;
+        }
+        if (i >= layer.length * 0.75) {
+            numOfFilters = 512;
         }
     }
 
@@ -278,32 +281,26 @@ public class NetworkGenerator implements INetworkGenerator {
             Integer temp1 = shapeList1.get(i);
             for (int j = i + 1; j < shapeList0.size(); j++) {
                 if (temp0.equals(shapeList0.get(j)) && temp1.equals(shapeList1.get(j))) {
-                    StringBuilder m = new StringBuilder();
-                    m.append("layer_" + String.format("%03d", layer[j + 2].id));
-                    m.append(", layer_" + String.format("%03d", layer[i + 2].id));
-                    if (!merges2D.contains(m.toString())) {
-                        merges2D.add(m.toString());
-                    }
+                    addToMerge(i, j, merges2D);
                 }
                 if (temp0 == shapeList0.get(j)) {
-                    StringBuilder m = new StringBuilder();
-                    m.append("layer_" + String.format("%03d", layer[j + 2].id));
-                    m.append(", layer_" + String.format("%03d", layer[i + 2].id));
-                    if (!merges1D.contains(m.toString())) {
-                        merges1D.add(m.toString());
-                    }
+                    addToMerge(i, j, merges1D);
                 }
                 if (temp1 == shapeList1.get(j)) {
-                    StringBuilder m = new StringBuilder();
-                    m.append("layer_" + String.format("%03d", layer[j + 2].id));
-                    m.append(", layer_" + String.format("%03d", layer[i + 2].id));
-                    if (!merges1D.contains(m.toString())) {
-                        merges1D.add(m.toString());
-                    }
+                    addToMerge(i, j, merges1D);
                 }
             }
         }
         return !merges1D.isEmpty() && !merges2D.isEmpty();
+    }
+
+    private void addToMerge(int i, int j, ArrayList<String> merges2D) {
+        StringBuilder m = new StringBuilder();
+        m.append("layer_" + String.format("%03d", layer[j + 2].id));
+        m.append(", layer_" + String.format("%03d", layer[i + 2].id));
+        if (!merges2D.contains(m.toString())) {
+            merges2D.add(m.toString());
+        }
     }
 
 }

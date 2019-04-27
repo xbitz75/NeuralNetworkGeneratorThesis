@@ -9,33 +9,31 @@ public class Conv2DLayer extends AbstractLayer {
 		relu, tanh, sigmoid
 	}
 
-	private int neuronsUpperBound;
-	private int neurons;
+	private int filters;
 	private String kernelSize = "(3, 3)";
 	private ACTIVATION activation;
 
-	public Conv2DLayer(int id, NetworkGenerator network, int neuronsUpperBound) {
+	public Conv2DLayer(int id, NetworkGenerator network, int filters) {
 		super(id, network);
-		this.neuronsUpperBound = neuronsUpperBound;
+		this.filters = filters;
 		createConnections();
 		layerType = "Conv2D";
 		setShapesFromPrevLayer();
 		shape0 = shape0 - (3 - 1); // TODO make kernelSize a variable
 		shape1 = shape1 - (3 - 1); // TODO (kernelSize - 1)
-		shape2 = neurons;
+		shape2 = this.filters;
 	}
 
 	@Override
 	public String build() {
-		return "layer_" + String.format("%03d", id) + " = Conv2D(" + neurons + ", " + kernelSize + ", activation='"
+		return "layer_" + String.format("%03d", id) + " = Conv2D(" + filters + ", " + kernelSize + ", activation='"
 				+ activation + "', padding=\"same\")(" + getPreviousLayers()[0].getLayerId() + ")";
 	}
 
-	// randomly selects activation function and number of neurons, fills list of previous Layers
+	// randomly selects activation function and number of filters, fills list of previous Layers
 	@Override
 	protected void createConnections() {
 		activation = ACTIVATION.values()[new Random().nextInt(ACTIVATION.values().length)];
-		neurons = new Random().nextInt(neuronsUpperBound) + 1;
 		for (int i = 0; i < prevLayers.size(); i++) {
 			setPrevLayers(i);
 		}
