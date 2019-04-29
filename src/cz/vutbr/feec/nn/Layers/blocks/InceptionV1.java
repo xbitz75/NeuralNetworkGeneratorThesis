@@ -9,11 +9,11 @@ public class InceptionV1 extends AbstractLayer {
 	private int filters2;
 	private int filters3;
 
-	public InceptionV1(int id, NetworkGenerator network, int maxFilters) {
+	public InceptionV1(int id, NetworkGenerator network) {
 		super(id, network);
-		filters1 = (int) Math.round((Math.random() * ((maxFilters - 20) + 1)) + 20);// randomly generated amount of neurons
-		filters2 = (int) Math.round((Math.random() * ((maxFilters - 20) + 1)) + 20);
-		filters3 = (int) Math.round((Math.random() * ((maxFilters - 20) + 1)) + 20);
+		filters1 = 64;
+		filters2 = 128;
+		filters3 = 256;
 		
 		layerType = "InceptionV1";
 		createConnections();

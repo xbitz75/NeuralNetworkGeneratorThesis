@@ -43,15 +43,15 @@ public class NetworkGenerator implements INetworkGenerator {
 
     }
 
-    private void generateRest(String outputShape, int neuronsUpperBound) {
+    private void generateRest(String outputShape, int maxFilters) {
         for (int i = 2; i < layer.length; i++) {
             gradualIncreaseOfNeuronsUpperBound(i);
             double rnd = Math.random();
             switch (getDimensions()) {
                 case 1:
-                    if (rnd > 0.70 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
+                    if (rnd > 0.60 && layer[i - 1].getLayerType().equals("Dense")) {
                         layer[i] = new BatchNormalization(i, this);
-                    } else if (rnd >= 0.70 && !layer[i - 1].getLayerType().equals("Dropout")) {
+                    } else if (rnd >= 0.40 && !layer[i - 1].getLayerType().equals("Dropout")) {
                         layer[i] = new Dropout(i, this);
                     } else {
                         layer[i] = new DenseLayer(i, this, 1000);
@@ -59,17 +59,16 @@ public class NetworkGenerator implements INetworkGenerator {
                     break;
                 case 2:
                     if (rnd < 0.20 && layer[i - 1].shape0 > 2) { // 20 % probability
-                        layer[i] = new Conv1DLayer(i, this, neuronsUpperBound);
+                        layer[i] = new Conv1DLayer(i, this, maxFilters);
                     } else if (rnd < 0.40 && !layer[i - 1].getLayerType().equals("MnistBlock")) { // making sure mnist blocks
-                        // wont
-                        // follow each other
-                        layer[i] = new MnistBlock(i, this, neuronsUpperBound);
+                        // wont follow each other
+                        layer[i] = new MnistBlock(i, this, maxFilters);
                     } else if (rnd < 0.25 && !layer[i - 1].getLayerType().equals("Dropout")) {
                         layer[i] = new Dropout(i, this);
                     } else if (rnd < 0.60 && !layer[i - 1].getLayerType().equals("BatchNormalization")) {
                         layer[i] = new BatchNormalization(i, this);
                     } else if (rnd < 0.80) {
-                        layer[i] = new DenseLayer(i, this, neuronsUpperBound);
+                        layer[i] = new DenseLayer(i, this, maxFilters);
                     } else if (rnd < 0.90 && layer[i - 1].shape0 > 10) {
                         layer[i] = new MaxPooling1D(i, this);
                     } else {
@@ -77,19 +76,19 @@ public class NetworkGenerator implements INetworkGenerator {
                     }
                     break;
                 case 3:
-                    if (i < (layer.length * 0.75)) {
+                    if (i < (layer.length * 0.9)) {
                         if (rnd >= 0.50) {
                             if (rnd < 0.75) {
-                                layer[i] = new InceptionV1(i, this, neuronsUpperBound);
+                                layer[i] = new InceptionV1(i, this);
+                            } else if (layer[i - 1].getLayerType().equals("ConvBlock")  || layer[i - 1].getLayerType().equals("InceptionV1") || layer[i - 1].getLayerType().equals("InceptionVn")) {
+                                layer[i] = new MaxPooling2D(i, this);
                             } else {
-                                layer[i] = new InceptionVn(i, this, neuronsUpperBound);
+                                layer[i] = new InceptionVn(i, this);
                             }
                         } else if (rnd < 0.50 && !layer[i - 1].getLayerType().equals("Conv2D")) {
-                            layer[i] = new Conv2DLayer(i, this, 90);
+                            layer[i] = new Conv2DLayer(i, this, maxFilters);
                         } else if (rnd < 0.20 && !layer[i - 1].getLayerType().equals("ConvBlock")) {
-                            layer[i] = new ConvBlock(i, this, neuronsUpperBound);
-                        } else if (rnd < 1 && layer[i - 1].getLayerType().equals("Conv2D")) {
-                            layer[i] = new MaxPooling2D(i, this);
+                            layer[i] = new ConvBlock(i, this, maxFilters);
                         } else {
                             layer[i] = new FlattenLayer(i, this);
                         }
@@ -222,6 +221,7 @@ public class NetworkGenerator implements INetworkGenerator {
         str.append("from keras.layers import MaxPooling2D\n");
         str.append("from keras.layers.merge import concatenate\n");
         str.append("from keras.layers import Add\n");
+        str.append("from keras.layers import DepthwiseConv2D\n");
         str.append("\n");
     }
 
