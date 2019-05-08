@@ -19,8 +19,8 @@ public class Conv2DLayer extends AbstractLayer {
 		createConnections();
 		layerType = "Conv2D";
 		setShapesFromPrevLayer();
-		shape0 = shape0 - (3 - 1); // TODO make kernelSize a variable
-		shape1 = shape1 - (3 - 1); // TODO (kernelSize - 1)
+		shape0 = shape0 - (3 - 1);
+		shape1 = shape1 - (3 - 1);
 		shape2 = this.filters;
 	}
 
@@ -30,7 +30,6 @@ public class Conv2DLayer extends AbstractLayer {
 				+ activation + "', padding=\"same\")(" + getPreviousLayers()[0].getLayerId() + ")";
 	}
 
-	// randomly selects activation function and number of filters, fills list of previous Layers
 	@Override
 	protected void createConnections() {
 		activation = ACTIVATION.values()[new Random().nextInt(ACTIVATION.values().length)];

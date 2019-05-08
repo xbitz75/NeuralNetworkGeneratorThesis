@@ -21,8 +21,6 @@ public class Graph {
 		this.probability = probability;
 		generateNodes();
 		generateBasicConnections();
-		//sortEdges(edgeTable);
-		//rewireNodes(0);
 		rewireNodesInRounds();
 		sortEdges(edgeTable);
 
@@ -39,15 +37,6 @@ public class Graph {
 					tempEdge = new Edge(nodes.get(i), nodes.get(i + j));
 				}
 				edgeTable.add(tempEdge);
-				// undirected Graph
-				// Edge tempEdge2;
-				// int diff = i - j;
-				// if (diff < 0) {
-				// tempEdge2 = new Edge(nodes.get(i), nodes.get(nodes.size() + diff));
-				// } else {
-				// tempEdge2 = new Edge(nodes.get(i), nodes.get(diff));
-				// }
-				// edgeTable.add(tempEdge2);
 			}
 		}
 	}

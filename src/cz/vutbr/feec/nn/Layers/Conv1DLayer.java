@@ -26,7 +26,7 @@ public class Conv1DLayer extends AbstractLayer {
 	@Override
 	public String build() {
 			return "layer_" + String.format("%03d", id) + " = Conv1D(" + filters + ", " + kernelSize + ", activation='"
-					+ activation + "')(" + getPreviousLayers()[0].getLayerId() + ")";
+					+ activation + ", padding=\"same\"')(" + getPreviousLayers()[0].getLayerId() + ")";
 	}
 
 	@Override

@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface IFileGenerator {
 	
-	public void generateFile() throws IOException;
+	void generateFile() throws IOException;
 }

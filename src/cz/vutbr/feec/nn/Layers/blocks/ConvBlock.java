@@ -21,8 +21,8 @@ public class ConvBlock extends AbstractLayer {
 		layerType = "ConvBlock";
 		createConnections();
 		setShapesFromPrevLayer();
-		shape0 = shape0 - (6 - 2); // TODO make kernelSize a variable
-		shape1 = shape1 - (6 - 2); // TODO (kernelSize - 1)
+		shape0 = shape0 - (6 - 2);
+		shape1 = shape1 - (6 - 2);
 		shape2 = this.filters;
 		int poolSize = 2;
 		shape0 = shape0 / poolSize;
