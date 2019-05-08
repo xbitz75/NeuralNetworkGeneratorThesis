@@ -2,7 +2,6 @@ package cz.vutbr.feec.nn;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import cz.vutbr.feec.nn.Interfaces.IFileGenerator;
 
 public class FileGenerator implements IFileGenerator {

@@ -9,38 +9,37 @@ public class DenseLayer extends AbstractLayer {
 		relu, tanh, sigmoid
 	}
 
-	private int maxNeurons;
-	private int neurons;
+	private int maxUnits;
+	private int units;
 	private ACTIVATION activation;
 
-	public DenseLayer(int id, NetworkGenerator network, int maxNeurons) {
+	public DenseLayer(int id, NetworkGenerator network, int maxUnits) {
 		super(id, network);
-		this.maxNeurons = maxNeurons;
+		this.maxUnits = maxUnits;
 		layerType = "Dense";
 		createConnections();
 		setShapesFromPrevLayer();
 		if (network.getDimensions() == 1) {
-			shape0 = neurons;
+			shape0 = units;
 		} else if (network.getDimensions() == 2) {
-			shape1 = neurons;
+			shape1 = units;
 		} else if (network.getDimensions() == 3) {
-			shape2 = neurons;
+			shape2 = units;
 		}
-		// network.setShape1(neurons);
 	}
 
 	@Override
 	public String build() {
-		return "layer_" + String.format("%03d", id) + " = Dense(" + neurons + ", activation='" + activation + "')("
+		return "layer_" + String.format("%03d", id) + " = Dense(" + units + ", activation='" + activation + "')("
 				+ getPreviousLayers()[0].getLayerId() + ")";
 	}
 
-	// randomly selects activation function and number of neurons, fills list of
-	// previous layers
+	// randomly selects activation function and number of units, fills list of
+	// previous Layers
 	@Override
 	protected void createConnections() {
 		activation = ACTIVATION.values()[new Random().nextInt(ACTIVATION.values().length)];
-		neurons = new Random().nextInt(maxNeurons) + 40;
+		units = (int) Math.round((Math.random() * ((maxUnits - 100) + 1)) + 100);
 		for (int i = 0; i < prevLayers.size(); i++) {
 			setPrevLayers(i);
 		}

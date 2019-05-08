@@ -1,30 +1,24 @@
 package cz.vutbr.feec.nn;
 
 import java.io.IOException;
-
-import cz.vutbr.feec.nn.Interfaces.INetworkGenerator;
+import java.util.stream.IntStream;
 
 public class GeneratorExample {
-	private static int models;
 	private static int capacity;
 	private static int dimensions;
 	private static String outputShape;
 	private static Integer[] inputShape;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 
 		// Network parameters
-		models = 5; // number of generated models
-		capacity = 10; // number of layers per model
+		int models = 5; // number of generated models
+		capacity = 20; // number of Layers/blocks per model
 		inputShape = new Integer[] { 128, 128, 3, 0 }; // input
 		dimensions = 3; // number of inputs dimensions
-		outputShape = "siamese"; // output of NN or "siamese"
-		
-		// Bellow create new instances of INetworkGenerator and IFileGenerator to simulate IoC
-		NetworkGenerator networkGenerator = new NetworkGenerator(capacity, dimensions, inputShape, outputShape);
-		// Above create new instances of INetworkGenerator and IFileGenerator to simulate IoC
-		
-		generate(models, networkGenerator);
+		outputShape = "3472"; // output of NN or "siamese"
+				
+		generate(models);
 	}
 	
 	/**
@@ -32,20 +26,19 @@ public class GeneratorExample {
 	 * 
 	 * @param models
 	 * 			  - number of generated models
-	 * @param networkGenerator
-	 *            - instance of INetworkGenerator
 	 **/
-	private static void generate(int models, INetworkGenerator networkGenerator) {
-		for (int i = 0; i < models; i++) {
+	private static void generate(int models) {
+		IntStream.range(0, models).forEach(i -> {
+			NetworkGenerator networkGenerator = new NetworkGenerator(capacity, dimensions, inputShape, outputShape);
 			String code = networkGenerator.build();
-			FileGenerator fileGenerator = new FileGenerator("python_model_" + i + ".py", code); // TODO create IoC version
+			FileGenerator fileGenerator = new FileGenerator(String.format("python_model_%d.py", i), code);
 			try {
 				fileGenerator.generateFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				System.out.println("file generator failed");
 				e.printStackTrace();
 			}
-		}
+		});
 	}	
 	
 	
